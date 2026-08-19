@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Coin des Mages — Demandes de Forgemagie Dofus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stone:#171009;
+    --wood-dark:#3c2513;
+    --wood:#5c3a20;
+    --wood-light:#7d5330;
+    --wood-edge:#2a190c;
+    --parchment:#eddcae;
+    --parchment-dark:#e0c98d;
+    --ink:#3a2a15;
+    --ink-soft:#6b563a;
+    --green:#8bc53f;
+    --green-dark:#5e8f26;
+    --gold:#e8b23d;
+    --ember:#d9591f;
+    --red:#b33a2a;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse 900px 520px at 12% -8%, rgba(139,197,63,0.08), transparent 60%),
+      radial-gradient(ellipse 800px 500px at 100% 6%, rgba(232,178,61,0.09), transparent 55%),
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 3px),
+      var(--stone);
+    color:var(--parchment);
+    font-family:'Nunito Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3, .display{ font-family:'Baloo 2', sans-serif; letter-spacing:0.01em; margin:0; }
+  a{ color:inherit; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 28px; }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+
+  .woodframe{
+    background:linear-gradient(160deg, var(--wood-light), var(--wood) 40%, var(--wood-dark));
+    border:3px solid var(--wood-edge); border-radius:10px;
+    box-shadow: inset 0 2px 0 rgba(255,255,255,0.12), inset 0 -3px 0 rgba(0,0,0,0.35), 0 6px 14px rgba(0,0,0,0.35);
+  }
+  .parchpanel{
+    background:radial-gradient(circle at 20% 15%, rgba(255,255,255,0.35), transparent 40%), linear-gradient(165deg, var(--parchment), var(--parchment-dark));
+    border:2px solid rgba(75,50,20,0.35); border-radius:7px; color:var(--ink);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);
+  }
+  .rune-icon{ width:18px; height:18px; flex:none; }
+
+  /* ---------- Header ---------- */
+  header{ position:sticky; top:0; z-index:50; background:linear-gradient(180deg, var(--wood-dark), #2a1a0e 90%); border-bottom:3px solid var(--wood-edge); box-shadow:0 4px 14px rgba(0,0,0,0.4); }
+  .headbar{ display:flex; align-items:center; justify-content:space-between; padding:14px 0; }
+  .brand{ display:flex; align-items:center; gap:12px; text-decoration:none; }
+  .brand .rune{ width:40px; height:40px; flex:none; filter:drop-shadow(0 2px 3px rgba(0,0,0,0.4)); }
+  .brand .rune svg{ width:100%; height:100%; }
+  .brand-name{ font-size:19px; font-weight:700; color:var(--parchment); line-height:1.1; font-family:'Baloo 2'; }
+  .brand-name span{ display:block; font-family:'Nunito Sans'; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--green); font-weight:800; margin-top:2px; }
+  nav{ display:flex; align-items:center; gap:26px; }
+  nav a{ text-decoration:none; color:var(--parchment-dark); font-size:14px; font-weight:700; transition:color .2s; }
+  nav a:hover{ color:var(--green); }
+  .head-actions{ display:flex; align-items:center; gap:12px; }
+  .btn{
+    border:2px solid var(--wood-edge); background:linear-gradient(160deg, var(--wood-light), var(--wood)); color:var(--parchment);
+    padding:9px 18px; border-radius:7px; font-size:13.5px; font-weight:700; font-family:'Baloo 2'; cursor:pointer; text-decoration:none;
+    display:inline-flex; align-items:center; gap:8px; transition:transform .15s; box-shadow: inset 0 2px 0 rgba(255,255,255,0.15), inset 0 -2px 0 rgba(0,0,0,0.3);
+  }
+  .btn:hover{ transform:translateY(-1px); }
+  .btn-rune{ background:linear-gradient(160deg, #a3d95c, var(--green-dark)); border-color:#3f5f1a; color:#1c2a0c; }
+  .btn-sm{ padding:6px 12px; font-size:12px; border-radius:6px; }
+
+  /* ---------- Hero ---------- */
+  .hero{ position:relative; overflow:hidden; padding:80px 0 60px; background:radial-gradient(ellipse 700px 400px at 80% 0%, rgba(232,178,61,0.10), transparent 60%), var(--stone); border-bottom:3px solid var(--wood-edge); }
+  .hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:50px; align-items:center; }
+  .eyebrow{ display:inline-flex; align-items:center; gap:8px; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); font-weight:800; margin-bottom:16px; font-family:'Baloo 2'; }
+  .eyebrow::before{ content:''; width:16px; height:3px; border-radius:2px; background:var(--gold); }
+  .hero h1{ font-size:clamp(30px, 4vw, 46px); line-height:1.1; font-weight:800; color:var(--parchment); }
+  .hero h1 em{ font-style:normal; color:var(--green); text-shadow:0 0 18px rgba(139,197,63,0.35); }
+  .hero p.lead{ margin-top:18px; font-size:16px; line-height:1.6; color:var(--parchment-dark); max-width:52ch; font-weight:600; }
+  .hero-actions{ display:flex; gap:14px; margin-top:28px; flex-wrap:wrap; }
+  .hero-stats{ display:flex; gap:14px; margin-top:34px; flex-wrap:wrap; }
+  .hstat{ padding:12px 16px; } .hstat b{ display:block; font-family:'Baloo 2'; font-size:20px; color:var(--gold); } .hstat span{ font-size:11px; color:var(--parchment-dark); font-weight:700; }
+
+  .rune-stage{ position:relative; aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; }
+  .rune-stage svg{ width:100%; height:100%; max-width:400px; }
+  .ring-outer{ animation:spin 100s linear infinite; transform-origin:center; }
+  .ring-runes{ animation:spin-rev 70s linear infinite; transform-origin:center; }
+  @keyframes spin{ to{ transform:rotate(360deg);} }
+  @keyframes spin-rev{ to{ transform:rotate(-360deg);} }
+  .item-float{ animation:float 3.6s ease-in-out infinite; transform-origin:center; }
+  @keyframes float{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-9px);} }
+  .slot-pulse{ animation:slotglow 2.4s ease-in-out infinite; }
+  @keyframes slotglow{ 0%,100%{ opacity:.55;} 50%{ opacity:1;} }
+
+  section{ padding:70px 0; }
+  .section-head{ max-width:680px; margin-bottom:36px; }
+  .section-head .eyebrow{ margin-bottom:12px; }
+  .section-head h2{ font-size:clamp(22px,2.6vw,28px); color:var(--parchment); font-weight:800; }
+  .section-head p{ color:var(--parchment-dark); margin-top:12px; font-size:14.5px; line-height:1.6; font-weight:600; }
+
+  #comment-ca-marche{ border-top:3px solid var(--wood-edge); border-bottom:3px solid var(--wood-edge); background:linear-gradient(180deg, #1b130b, var(--stone)); }
+  .steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  .step{ padding:22px 20px; }
+  .step .num{ width:32px; height:32px; border-radius:50%; background:linear-gradient(160deg, var(--green), var(--green-dark)); border:2px solid #3f5f1a; display:flex; align-items:center; justify-content:center; font-family:'Baloo 2'; font-size:13px; color:#1c2a0c; font-weight:800; margin-bottom:12px; }
+  .step h3{ font-size:16px; color:var(--parchment); margin-bottom:8px; font-weight:700; font-family:'Baloo 2'; }
+  .step p{ font-size:13.5px; color:var(--parchment-dark); line-height:1.55; margin:0; font-weight:600; }
+
+  /* ---------- Item icon badges (illustrations originales) ---------- */
+  .item-badge{ width:52px; height:52px; border-radius:50%; flex:none; background:radial-gradient(circle at 30% 25%, #4a2f18, #2a190c); border:2px solid var(--gold); display:flex; align-items:center; justify-content:center; box-shadow:inset 0 0 8px rgba(0,0,0,0.5); }
+  .item-badge svg{ width:30px; height:30px; }
+  .item-badge.sm{ width:40px; height:40px; } .item-badge.sm svg{ width:22px; height:22px; }
+
+  /* ---------- Formulaire "publier une demande" ---------- */
+  .request-form{ padding:28px; display:grid; grid-template-columns:1fr 1fr; gap:18px 20px; }
+  .field{ display:flex; flex-direction:column; gap:6px; }
+  .field.full{ grid-column:1 / -1; }
+  .field label{ font-family:'Baloo 2'; font-size:13px; color:var(--ink); font-weight:700; }
+  .field input, .field select, .field textarea{
+    background:#fbf3dc; color:var(--ink); border:2px solid rgba(75,50,20,0.3); border-radius:6px;
+    padding:9px 11px; font-size:13.5px; font-family:'Nunito Sans'; font-weight:700;
+  }
+  .field textarea{ resize:vertical; min-height:60px; font-weight:600; }
+  .stat-rows{ display:flex; flex-direction:column; gap:10px; }
+  .stat-row{ display:grid; grid-template-columns:1.4fr 0.8fr 0.8fr auto; gap:8px; align-items:center; }
+  .stat-row select, .stat-row input{ padding:8px 9px; font-size:13px; }
+  .row-remove{ background:none; border:none; color:var(--red); font-size:18px; cursor:pointer; font-weight:800; line-height:1; padding:4px; }
+  .add-stat-btn{
+    align-self:flex-start; background:none; border:2px dashed rgba(75,50,20,0.35); color:var(--ink-soft);
+    padding:8px 14px; border-radius:6px; font-size:12.5px; font-weight:800; font-family:'Baloo 2'; cursor:pointer;
+  }
+  .add-stat-btn:hover{ border-color:var(--green-dark); color:var(--green-dark); }
+  .form-submit{ grid-column:1 / -1; display:flex; justify-content:flex-end; margin-top:6px; }
+
+  /* ---------- Filtres serveur ---------- */
+  .server-bar{ display:flex; align-items:center; gap:16px; flex-wrap:wrap; padding:16px 22px; margin-bottom:30px; }
+  .server-bar label{ font-size:13px; color:var(--parchment); font-weight:800; font-family:'Baloo 2'; }
+  select{ background:var(--parchment); color:var(--ink); border:2px solid rgba(75,50,20,0.4); padding:8px 12px; border-radius:6px; font-size:13.5px; font-family:'Nunito Sans'; font-weight:700; }
+
+  /* ---------- Demandes en cours ---------- */
+  .requests-list{ display:flex; flex-direction:column; gap:18px; }
+  .request-card{ padding:22px; }
+  .req-top{ display:flex; gap:16px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; }
+  .req-item{ display:flex; gap:14px; align-items:center; }
+  .req-item h3{ font-size:16.5px; color:var(--ink); font-weight:800; font-family:'Baloo 2'; }
+  .req-item .type-tag{ font-size:11px; color:var(--ink-soft); font-weight:700; margin-top:2px; }
+  .status-badge{ font-size:11px; font-weight:800; font-family:'Baloo 2'; padding:5px 12px; border-radius:14px; white-space:nowrap; }
+  .status-open{ background:rgba(139,197,63,0.22); color:#3f5f1a; border:1.5px solid var(--green-dark); }
+  .status-done{ background:rgba(217,89,31,0.18); color:#8a3a12; border:1.5px solid var(--ember); }
+  .req-meta{ display:flex; gap:14px; flex-wrap:wrap; margin-top:12px; font-size:12.5px; color:var(--ink-soft); font-weight:700; }
+  .req-meta b{ color:var(--ink); }
+  .stats-line{ display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+  .stat-chip{ display:inline-flex; align-items:center; gap:5px; font-weight:800; font-size:11px; background:rgba(75,50,20,0.08); border:1.5px solid rgba(75,50,20,0.25); color:var(--ink); padding:4px 8px 4px 6px; border-radius:14px; }
+
+  .offers-block{ margin-top:16px; border-top:2px dashed rgba(75,50,20,0.25); padding-top:14px; }
+  .offers-block h4{ font-size:12.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); font-family:'Baloo 2'; margin-bottom:10px; }
+  .offer-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 0; border-bottom:1px dashed rgba(75,50,20,0.15); }
+  .offer-row:last-child{ border-bottom:none; }
+  .offer-who{ display:flex; align-items:center; gap:10px; }
+  .offer-avatar{ width:30px; height:30px; border-radius:50%; background:linear-gradient(160deg, var(--green), var(--green-dark)); border:2px solid #3f5f1a; display:flex; align-items:center; justify-content:center; font-family:'Baloo 2'; font-weight:800; color:#1c2a0c; font-size:12px; flex:none; }
+  .offer-who div b{ display:block; font-size:13px; color:var(--ink); }
+  .offer-who div span{ font-size:11px; color:var(--ink-soft); font-weight:700; }
+  .offer-price{ font-family:'Baloo 2'; color:var(--ember); font-weight:800; font-size:14px; white-space:nowrap; }
+  .offer-actions{ display:flex; align-items:center; gap:10px; }
+  .no-offers{ font-size:12.5px; color:var(--ink-soft); font-weight:600; font-style:italic; }
+  .chosen-tag{ font-size:10.5px; background:var(--green-dark); color:#eafccb; padding:3px 9px; border-radius:10px; font-weight:800; font-family:'Baloo 2'; }
+
+  .bid-form{ display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; align-items:center; }
+  .bid-form input{ background:#fbf3dc; border:2px solid rgba(75,50,20,0.3); border-radius:6px; padding:7px 10px; font-size:12.5px; font-weight:700; color:var(--ink); }
+  .bid-form input[name="pseudo"]{ width:120px; } .bid-form input[name="price"]{ width:100px; } .bid-form input[name="delay"]{ width:90px; }
+
+  /* ---------- Sellers ---------- */
+  .sellers{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  .seller-card{ padding:20px; text-align:center; background:linear-gradient(160deg, var(--wood-light), var(--wood)); border:3px solid var(--wood-edge); border-radius:10px; box-shadow: inset 0 2px 0 rgba(255,255,255,0.1), inset 0 -3px 0 rgba(0,0,0,0.3); }
+  .seller-avatar{ width:50px; height:50px; margin:0 auto 12px; border-radius:50%; background:linear-gradient(160deg, var(--green), var(--green-dark)); border:2px solid #3f5f1a; display:flex; align-items:center; justify-content:center; font-family:'Baloo 2'; font-weight:800; color:#1c2a0c; font-size:17px; }
+  .seller-card h4{ font-size:14px; margin:0 0 4px; font-family:'Baloo 2'; font-weight:700; color:var(--parchment); }
+  .seller-card .rank{ font-size:11px; color:var(--gold); font-weight:700; }
+  .seller-card .metrics{ margin-top:12px; font-size:11.5px; color:var(--parchment-dark); display:flex; justify-content:space-between; font-weight:700; }
+
+  #devenir-forgemage{ border-top:3px solid var(--wood-edge); background:linear-gradient(180deg, #1b130b, var(--stone)); }
+  .cta-band{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .cta-card{ padding:28px; }
+  .cta-card h3{ font-size:18px; color:var(--gold); font-weight:800; font-family:'Baloo 2'; margin-bottom:10px; }
+  .cta-card p{ font-size:13.5px; color:var(--parchment-dark); line-height:1.6; margin-bottom:18px; font-weight:600; }
+
+  footer{ padding:44px 0 24px; background:#120c07; border-top:3px solid var(--wood-edge); }
+  .foot-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:30px; margin-bottom:34px; }
+  .foot-brand p{ color:var(--parchment-dark); font-size:12.5px; line-height:1.6; margin-top:14px; max-width:32ch; font-weight:600; }
+  .foot-col h5{ font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--gold); margin-bottom:14px; font-family:'Baloo 2'; }
+  .foot-col ul{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:9px; }
+  .foot-col a{ text-decoration:none; color:var(--parchment-dark); font-size:12.5px; font-weight:600; }
+  .foot-col a:hover{ color:var(--green); }
+  .foot-bottom{ border-top:1px solid rgba(230,199,140,0.14); padding-top:18px; display:flex; justify-content:space-between; color:var(--parchment-dark); font-size:11px; flex-wrap:wrap; gap:10px; font-weight:600; }
+
+  @media (max-width: 980px){
+    .hero-grid{ grid-template-columns:1fr; } .rune-stage{ max-width:280px; margin:0 auto; }
+    .steps{ grid-template-columns:1fr 1fr; } .sellers{ grid-template-columns:1fr 1fr; }
+    .cta-band{ grid-template-columns:1fr; } .foot-grid{ grid-template-columns:1fr 1fr; }
+    .request-form{ grid-template-columns:1fr; } nav{ display:none; }
+  }
+  @media (max-width: 620px){
+    .steps, .sellers{ grid-template-columns:1fr; } .foot-grid{ grid-template-columns:1fr; }
+    .stat-row{ grid-template-columns:1fr 1fr; } .req-top{ flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap headbar">
+    <a href="#top" class="brand">
+      <span class="rune"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" fill="#3c2513" stroke="#e8b23d" stroke-width="1.5"/><path d="M20 9 L23.5 17 L20 25 L16.5 17 Z" fill="#8bc53f"/><path d="M11 20 L20 16.5 L29 20 L20 23.5 Z" fill="#e8b23d" opacity="0.85"/></svg></span>
+      <span class="brand-name">Le Coin des Mages<span>Demandes de Forgemagie</span></span>
+    </a>
+    <nav>
+      <a href="#comment-ca-marche">Comment ça marche</a>
+      <a href="#publier">Publier une demande</a>
+      <a href="#demandes">Demandes en cours</a>
+      <a href="#forgemages">Forgemages</a>
+    </nav>
+    <div class="head-actions">
+      <a class="btn btn-rune" href="#publier">Publier une demande</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Interserveur · Paiement en Kamas</span>
+      <h1>Publiez votre demande, <em>les forgemages se positionnent.</em></h1>
+      <p class="lead">Décrivez l'objet et le jet de stats que vous visez, fixez votre budget, et laissez les forgemages vérifiés vous faire une offre. Vous choisissez celle qui vous convient.</p>
+      <div class="hero-actions">
+        <a class="btn btn-rune" href="#publier">Publier une demande</a>
+        <a class="btn" href="#demandes">Voir les demandes en cours</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat woodframe"><b>1 240+</b><span>Forgemagies livrées</span></div>
+        <div class="hstat woodframe"><b>68</b><span>Forgemages actifs</span></div>
+        <div class="hstat woodframe"><b>4,9 / 5</b><span>Satisfaction moyenne</span></div>
+      </div>
+    </div>
+    <div class="rune-stage" aria-hidden="true">
+      <svg viewBox="0 0 400 400">
+        <defs><radialGradient id="g1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#e8b23d" stop-opacity="0.5"/><stop offset="100%" stop-color="#e8b23d" stop-opacity="0"/></radialGradient></defs>
+        <g class="ring-outer">
+          <circle cx="200" cy="200" r="176" fill="none" stroke="#3c2513" stroke-width="14"/>
+          <circle cx="200" cy="200" r="176" fill="none" stroke="#5c3a20" stroke-width="2"/>
+          <g fill="#e8b23d"><path d="M200 24 l6 14 -6 14 -6-14 Z"/><path d="M200 376 l6-14 -6-14 -6 14 Z"/><path d="M24 200 l14-6 14 6 -14 6 Z"/><path d="M376 200 l-14-6 -14 6 14 6 Z"/></g>
+        </g>
+        <g class="ring-runes">
+          <circle cx="200" cy="200" r="128" fill="none" stroke="#7d5330" stroke-width="1.5" stroke-dasharray="3 7"/>
+          <g class="slot-pulse"><circle cx="200" cy="72" r="17" fill="#3c2513" stroke="#8bc53f" stroke-width="2.5"/><path d="M200 64 l5 8 -5 8 -5-8 Z" fill="#8bc53f"/></g>
+          <g class="slot-pulse" style="animation-delay:.6s"><circle cx="328" cy="200" r="17" fill="#3c2513" stroke="#e8b23d" stroke-width="2.5"/><circle cx="328" cy="200" r="5" fill="#e8b23d"/></g>
+          <g class="slot-pulse" style="animation-delay:1.2s"><circle cx="200" cy="328" r="17" fill="#3c2513" stroke="#d9591f" stroke-width="2.5"/><path d="M193 321 h14 l-7 15 Z" fill="#d9591f"/></g>
+          <g class="slot-pulse" style="animation-delay:1.8s"><circle cx="72" cy="200" r="17" fill="#3c2513" stroke="#8bc53f" stroke-width="2.5"/><rect x="65" y="193" width="14" height="14" fill="#8bc53f"/></g>
+        </g>
+        <g class="item-float">
+          <circle cx="200" cy="200" r="58" fill="url(#g1)"/>
+          <circle cx="200" cy="200" r="34" fill="none" stroke="#e8b23d" stroke-width="6"/>
+          <circle cx="200" cy="200" r="34" fill="none" stroke="#3c2513" stroke-width="2"/>
+          <circle cx="200" cy="176" r="8" fill="#8bc53f" stroke="#3c2513" stroke-width="2"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="comment-ca-marche">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Le déroulé</span>
+      <h2>Comment fonctionne une demande de forgemagie</h2>
+      <p>Le principe : ce sont les forgemages qui viennent à vous, pas l'inverse.</p>
+    </div>
+    <div class="steps">
+      <div class="step woodframe">
+        <span class="num">1</span>
+        <h3>Publiez votre demande</h3>
+        <p>Choisissez l'objet, les stats visées avec tolérance, votre budget max et votre serveur.</p>
+      </div>
+      <div class="step woodframe">
+        <span class="num">2</span>
+        <h3>Les forgemages se positionnent</h3>
+        <p>Chaque forgemage intéressé propose son prix et son délai directement sur votre demande.</p>
+      </div>
+      <div class="step woodframe">
+        <span class="num">3</span>
+        <h3>Vous choisissez et validez</h3>
+        <p>Vous sélectionnez l'offre qui vous convient, remettez l'item en jeu, payez à la livraison.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="publier">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Le comptoir</span>
+      <h2>Publier une demande de forgemagie</h2>
+      <p>Plus votre demande est précise, plus les offres des forgemages seront pertinentes.</p>
+    </div>
+
+    <form class="request-form parchpanel" id="requestForm">
+      <div class="field">
+        <label for="itemType">Type d'objet</label>
+        <select id="itemType" required>
+          <option value="anneau">Anneau</option>
+          <option value="amulette">Amulette</option>
+          <option value="cape">Cape</option>
+          <option value="ceinture">Ceinture</option>
+          <option value="chapeau">Chapeau</option>
+          <option value="bottes">Bottes</option>
+          <option value="familier">Familier</option>
+          <option value="dofus">Dofus / Trophée</option>
+          <option value="arme">Arme</option>
+          <option value="bouclier">Bouclier</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="itemName">Nom exact de l'objet</label>
+        <input type="text" id="itemName" placeholder="Ex : Anneau du Bouftou Royal" required>
+      </div>
+
+      <div class="field full">
+        <label>Stats souhaitées</label>
+        <div class="stat-rows" id="statRows"></div>
+        <button type="button" class="add-stat-btn" id="addStatBtn">+ Ajouter une stat</button>
+      </div>
+
+      <div class="field">
+        <label for="budget">Budget max (Kamas)</label>
+        <input type="number" id="budget" placeholder="Ex : 15000" min="0" required>
+      </div>
+      <div class="field">
+        <label for="reqServer">Serveur</label>
+        <select id="reqServer">
+          <option>Draconiros</option><option>Imagiro</option><option>Tylezia</option><option>Orukam</option>
+          <option>Hell Mina</option><option>Dakal</option><option>Rafal</option><option>Salar</option>
+          <option>Brial</option><option>Kourial</option><option>Mikhal</option>
+        </select>
+      </div>
+
+      <div class="field full">
+        <label for="reqNotes">Notes complémentaires (optionnel)</label>
+        <textarea id="reqNotes" placeholder="Précisions sur la tolérance globale, disponibilité en jeu, etc."></textarea>
+      </div>
+
+      <div class="form-submit">
+        <button type="submit" class="btn btn-rune">Publier la demande</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section id="demandes">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Le tableau des forges</span>
+      <h2>Demandes en cours</h2>
+      <p>Les forgemages consultent cette liste et se positionnent avec un prix et un délai.</p>
+    </div>
+
+    <div class="server-bar woodframe">
+      <label for="filterServer">Filtrer par serveur</label>
+      <select id="filterServer">
+        <option value="all">Tous les serveurs</option>
+        <option>Draconiros</option><option>Imagiro</option><option>Tylezia</option><option>Orukam</option>
+        <option>Hell Mina</option><option>Dakal</option><option>Rafal</option><option>Salar</option>
+        <option>Brial</option><option>Kourial</option><option>Mikhal</option>
+      </select>
+      <label for="filterStatus">Statut</label>
+      <select id="filterStatus">
+        <option value="all">Toutes</option>
+        <option value="ouverte">Ouvertes</option>
+        <option value="attribuee">Attribuées</option>
+      </select>
+    </div>
+
+    <div class="requests-list" id="requestsList"></div>
+  </div>
+</section>
+
+<section id="forgemages">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Le classement</span>
+      <h2>Top forgemages de la semaine</h2>
+      <p>Classement établi selon le nombre de forgemagies livrées et la note moyenne laissée par les clients.</p>
+    </div>
+    <div class="sellers" id="sellersGrid"></div>
+  </div>
+</section>
+
+<section id="devenir-forgemage">
+  <div class="wrap">
+    <div class="cta-band">
+      <div class="cta-card woodframe">
+        <h3>Devenir forgemage</h3>
+        <p>Vous maîtrisez la forgemagie et souhaitez vous positionner sur les demandes des joueurs ? Déposez votre candidature avec vos preuves de niveau.</p>
+        <a class="btn btn-rune" href="#">Postuler comme forgemage</a>
+      </div>
+      <div class="cta-card woodframe">
+        <h3>Vérifier un forgemage</h3>
+        <p>Avant de confier un item de valeur, vérifiez le pseudo en jeu d'un forgemage et son historique de commandes sur la plateforme.</p>
+        <a class="btn" href="#">Vérifier un pseudo en jeu</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#top" class="brand">
+          <span class="rune"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" fill="#3c2513" stroke="#e8b23d" stroke-width="1.5"/><path d="M20 9 L23.5 17 L20 25 L16.5 17 Z" fill="#8bc53f"/></svg></span>
+          <span class="brand-name">Le Coin des Mages</span>
+        </a>
+        <p>La plateforme qui met en relation joueurs et forgemages vérifiés pour toutes les demandes de forgemagie sur Dofus, serveur par serveur.</p>
+      </div>
+      <div class="foot-col"><h5>Plateforme</h5><ul>
+        <li><a href="#publier">Publier une demande</a></li>
+        <li><a href="#demandes">Demandes en cours</a></li>
+        <li><a href="#forgemages">Classement des forgemages</a></li>
+        <li><a href="#devenir-forgemage">Devenir forgemage</a></li>
+      </ul></div>
+      <div class="foot-col"><h5>Sécurité</h5><ul>
+        <li><a href="#">Vérifier un pseudo</a></li>
+        <li><a href="#">Utilisateurs sanctionnés</a></li>
+        <li><a href="#">Conditions générales</a></li>
+        <li><a href="#">Mentions légales</a></li>
+      </ul></div>
+      <div class="foot-col"><h5>Divers</h5><ul>
+        <li><a href="#">Guide d'utilisation</a></li>
+        <li><a href="#">Nous contacter</a></li>
+      </ul></div>
+    </div>
+    <div class="foot-bottom">
+      <span>"Le Coin des Mages" est un site non-officiel, sans lien avec Ankama. Univers Dofus © Ankama Studio.</span>
+      <span>© 2026 Le Coin des Mages</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ---------- Icônes d'objets originales (illustrations, pas d'assets du jeu) ---------- */
+  const ICONS = {
+    anneau: '<svg viewBox="0 0 32 32"><circle cx="16" cy="18" r="9" fill="none" stroke="#e8b23d" stroke-width="4"/><path d="M16 6 L20 12 L16 15 L12 12 Z" fill="#8bc53f"/></svg>',
+    amulette: '<svg viewBox="0 0 32 32"><path d="M8 5 Q16 12 24 5" fill="none" stroke="#e8b23d" stroke-width="2.5"/><circle cx="16" cy="19" r="8" fill="#8bc53f" stroke="#3c2513" stroke-width="2"/><path d="M16 14 L19 19 L16 24 L13 19 Z" fill="#3c2513"/></svg>',
+    cape: '<svg viewBox="0 0 32 32"><path d="M11 4 h10 l4 22 q-9 4 -18 0 Z" fill="#d9591f" stroke="#3c2513" stroke-width="1.5"/><circle cx="16" cy="8" r="2.5" fill="#e8b23d"/></svg>',
+    ceinture: '<svg viewBox="0 0 32 32"><rect x="3" y="13" width="26" height="6" rx="2" fill="#7d5330" stroke="#3c2513" stroke-width="1.5"/><rect x="12" y="10" width="8" height="12" rx="2" fill="#e8b23d" stroke="#3c2513" stroke-width="1.5"/></svg>',
+    chapeau: '<svg viewBox="0 0 32 32"><ellipse cx="16" cy="23" rx="13" ry="3.5" fill="#5c3a20"/><path d="M9 23 Q9 9 16 7 Q23 9 23 23 Z" fill="#d9591f" stroke="#3c2513" stroke-width="1.5"/><circle cx="16" cy="8" r="2" fill="#e8b23d"/></svg>',
+    bottes: '<svg viewBox="0 0 32 32"><path d="M11 4 h8 v14 l7 5 v4 h-19 v-6 q0-2 2-3 l2-1 Z" fill="#7d5330" stroke="#3c2513" stroke-width="1.5"/><rect x="11" y="4" width="8" height="5" fill="#e8b23d"/></svg>',
+    familier: '<svg viewBox="0 0 32 32"><circle cx="16" cy="18" r="9" fill="#8bc53f" stroke="#3c2513" stroke-width="1.5"/><circle cx="8" cy="10" r="3.5" fill="#8bc53f" stroke="#3c2513" stroke-width="1.5"/><circle cx="24" cy="10" r="3.5" fill="#8bc53f" stroke="#3c2513" stroke-width="1.5"/><circle cx="13" cy="17" r="1.6" fill="#3c2513"/><circle cx="19" cy="17" r="1.6" fill="#3c2513"/></svg>',
+    dofus: '<svg viewBox="0 0 32 32"><path d="M16 4 Q25 8 25 18 Q25 27 16 29 Q7 27 7 18 Q7 8 16 4 Z" fill="#e8b23d" stroke="#3c2513" stroke-width="1.5"/><circle cx="16" cy="16" r="3" fill="#3c2513"/><circle cx="11" cy="21" r="1.8" fill="#3c2513"/><circle cx="21" cy="21" r="1.8" fill="#3c2513"/></svg>',
+    arme: '<svg viewBox="0 0 32 32"><rect x="14.5" y="3" width="3" height="18" fill="#c9d4de" stroke="#3c2513" stroke-width="1.2"/><rect x="9" y="20" width="14" height="3.5" rx="1" fill="#7d5330" stroke="#3c2513" stroke-width="1.2"/><rect x="14" y="23" width="4" height="7" rx="1" fill="#5c3a20" stroke="#3c2513" stroke-width="1.2"/></svg>',
+    bouclier: '<svg viewBox="0 0 32 32"><path d="M16 4 L26 8 V16 Q26 25 16 29 Q6 25 6 16 V8 Z" fill="#7d5330" stroke="#3c2513" stroke-width="1.5"/><path d="M16 10 L20 16 L16 22 L12 16 Z" fill="#e8b23d"/></svg>',
+  };
+  const ITEM_LABELS = { anneau:'Anneau', amulette:'Amulette', cape:'Cape', ceinture:'Ceinture', chapeau:'Chapeau', bottes:'Bottes', familier:'Familier', dofus:'Dofus / Trophée', arme:'Arme', bouclier:'Bouclier' };
+  const STAT_OPTIONS = ['+1 PA','+1 PM','Retrait PA','Retrait PM','Dommages','Critique','Résistances','Vitalité','Sagesse','Soins','Prospection','Puissance'];
+
+  /* ---------- Données en mémoire ---------- */
+  let REQUESTS = [
+    { id:1, type:'anneau', name:'Anneau du Bouftou Royal', stats:[{stat:'+1 PA',target:1,tol:0},{stat:'Dommages',target:45,tol:5}], budget:15000, server:'Draconiros', notes:'', status:'ouverte',
+      offers:[ {pseudo:'Xelor Anvil',price:12000,delay:1}, {pseudo:'Kelena Forge',price:13500,delay:0.5} ] },
+    { id:2, type:'cape', name:'Cape du Corail Fossilisé', stats:[{stat:'Résistances',target:120,tol:10},{stat:'Vitalité',target:800,tol:50}], budget:20000, server:'Imagiro', notes:'', status:'attribuee',
+      offers:[ {pseudo:'Mornys',price:17000,delay:2}, {pseudo:'Anathar',price:18500,delay:1}, {pseudo:'Kelena Forge',price:16000,delay:2, chosen:true} ] },
+    { id:3, type:'familier', name:'Craqueleur', stats:[{stat:'Sagesse',target:60,tol:5}], budget:6000, server:'Rafal', notes:'', status:'ouverte', offers:[] },
+  ];
+  let nextId = 4;
+
+  const SELLERS = [
+    { name:'Xelor Anvil', rank:'#1 · Draconiros', orders:214, note:'4.9' },
+    { name:'Kelena Forge', rank:'#2 · Imagiro', orders:187, note:'5.0' },
+    { name:'Mornys', rank:'#3 · Rafal', orders:163, note:'4.8' },
+    { name:'Anathar', rank:'#4 · Tylezia', orders:141, note:'4.9' },
+  ];
+  const sellersGrid = document.getElementById('sellersGrid');
+  SELLERS.forEach(s=>{
+    const el = document.createElement('div'); el.className = 'seller-card';
+    el.innerHTML = `<div class="seller-avatar">${s.name.slice(0,2).toUpperCase()}</div><h4>${s.name}</h4><div class="rank">${s.rank}</div><div class="metrics"><span>${s.orders} forges</span><span>★ ${s.note}</span></div>`;
+    sellersGrid.appendChild(el);
+  });
+
+  /* ---------- Formulaire : lignes de stats dynamiques ---------- */
+  const statRowsEl = document.getElementById('statRows');
+  function addStatRow(){
+    const row = document.createElement('div');
+    row.className = 'stat-row';
+    row.innerHTML = `
+      <select class="stat-name">${STAT_OPTIONS.map(s=>`<option>${s}</option>`).join('')}</select>
+      <input type="number" class="stat-target" placeholder="Valeur visée" min="0">
+      <input type="number" class="stat-tol" placeholder="Tolérance ±" min="0">
+      <button type="button" class="row-remove" title="Retirer">×</button>`;
+    row.querySelector('.row-remove').addEventListener('click', ()=> row.remove());
+    statRowsEl.appendChild(row);
+  }
+  addStatRow(); addStatRow();
+  document.getElementById('addStatBtn').addEventListener('click', addStatRow);
+
+  document.getElementById('requestForm').addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const type = document.getElementById('itemType').value;
+    const name = document.getElementById('itemName').value.trim();
+    const budget = parseInt(document.getElementById('budget').value || '0');
+    const server = document.getElementById('reqServer').value;
+    const notes = document.getElementById('reqNotes').value.trim();
+    const stats = Array.from(statRowsEl.querySelectorAll('.stat-row')).map(row=>({
+      stat: row.querySelector('.stat-name').value,
+      target: row.querySelector('.stat-target').value || '?',
+      tol: row.querySelector('.stat-tol').value || '0',
+    }));
+    if(!name || stats.length === 0) return;
+
+    REQUESTS.unshift({ id: nextId++, type, name, stats, budget, server, notes, status:'ouverte', offers:[] });
+    renderRequests();
+    e.target.reset();
+    statRowsEl.innerHTML = ''; addStatRow(); addStatRow();
+    document.getElementById('demandes').scrollIntoView({behavior:'smooth'});
+  });
+
+  /* ---------- Rendu des demandes ---------- */
+  const requestsList = document.getElementById('requestsList');
+  function renderRequests(){
+    const fServer = document.getElementById('filterServer').value;
+    const fStatus = document.getElementById('filterStatus').value;
+    const filtered = REQUESTS.filter(r =>
+      (fServer==='all' || r.server===fServer) &&
+      (fStatus==='all' || (fStatus==='ouverte' && r.status==='ouverte') || (fStatus==='attribuee' && r.status==='attribuee'))
+    );
+    requestsList.innerHTML = filtered.map(r => {
+      const statsHtml = r.stats.map(s=>`<span class="stat-chip">${s.stat} : ${s.target}${s.tol!=='0'?` ±${s.tol}`:''}</span>`).join('');
+      const offersHtml = r.offers.length === 0
+        ? '<p class="no-offers">Aucun forgemage positionné pour l\'instant.</p>'
+        : r.offers.map((o,idx)=>`
+          <div class="offer-row">
+            <div class="offer-who">
+              <div class="offer-avatar">${o.pseudo.slice(0,2).toUpperCase()}</div>
+              <div><b>${o.pseudo}</b><span>Délai : ${o.delay} j</span></div>
+            </div>
+            <div class="offer-actions">
+              <span class="offer-price">${o.price.toLocaleString('fr-FR')} ₭</span>
+              ${o.chosen ? '<span class="chosen-tag">Choisi ✓</span>' : (r.status==='ouverte' ? `<button class="btn btn-sm" onclick="chooseOffer(${r.id-0 === r.id ? r.id : r.id}, ${idx})" data-req="${r.id}" data-idx="${idx}">Choisir</button>` : '')}
+            </div>
+          </div>`).join('');
+      const bidForm = r.status==='ouverte' ? `
+        <div class="bid-form">
+          <input type="text" name="pseudo" placeholder="Votre pseudo">
+          <input type="number" name="price" placeholder="Prix ₭">
+          <input type="number" name="delay" placeholder="Délai (j)" step="0.5">
+          <button type="button" class="btn btn-rune btn-sm" onclick="submitBid(${r.id}, this)">Se positionner</button>
+        </div>` : '';
+      return `
+        <div class="request-card parchpanel">
+          <div class="req-top">
+            <div class="req-item">
+              <div class="item-badge">${ICONS[r.type]}</div>
+              <div><h3>${r.name}</h3><div class="type-tag">${ITEM_LABELS[r.type]} · ${r.server}</div></div>
+            </div>
+            <span class="status-badge ${r.status==='ouverte' ? 'status-open' : 'status-done'}">${r.status==='ouverte' ? 'Ouverte' : 'Attribuée'}</span>
+          </div>
+          <div class="stats-line">${statsHtml}</div>
+          <div class="req-meta"><span>Budget max : <b>${r.budget.toLocaleString('fr-FR')} ₭</b></span>${r.notes ? `<span>${r.notes}</span>` : ''}</div>
+          <div class="offers-block">
+            <h4>Offres des forgemages (${r.offers.length})</h4>
+            ${offersHtml}
+          </div>
+          ${bidForm}
+        </div>`;
+    }).join('') || '<p class="no-offers" style="color:var(--parchment-dark)">Aucune demande ne correspond à ce filtre.</p>';
+  }
+
+  window.submitBid = function(reqId, btn){
+    const wrap = btn.closest('.bid-form');
+    const pseudo = wrap.querySelector('[name="pseudo"]').value.trim();
+    const price = parseInt(wrap.querySelector('[name="price"]').value || '0');
+    const delay = parseFloat(wrap.querySelector('[name="delay"]').value || '0');
+    if(!pseudo || !price) return;
+    const req = REQUESTS.find(r=>r.id===reqId);
+    req.offers.push({ pseudo, price, delay });
+    renderRequests();
+  };
+
+  window.chooseOffer = function(reqId, idx){
+    const req = REQUESTS.find(r=>r.id===reqId);
+    req.offers.forEach(o=> o.chosen = false);
+    req.offers[idx].chosen = true;
+    req.status = 'attribuee';
+    renderRequests();
+  };
+
+  document.getElementById('filterServer').addEventListener('change', renderRequests);
+  document.getElementById('filterStatus').addEventListener('change', renderRequests);
+
+  renderRequests();
+</script>
+
+</body>
+</html>
